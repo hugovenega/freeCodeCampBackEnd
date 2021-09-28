@@ -5,16 +5,13 @@ const port = 3000;
 const express = require('express');
 require('dotenv').config();
 const dns = require('dns');
-const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
 const mongoose = require('mongoose');
-
-
+var cors = require('cors');
 const app = express();
-
-app.use(bodyParser.urlencoded({ extended: false }));
-
-
+app.use(cors({optionsSuccessStatus: 200}))
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
 //server config
 mongoose.connect(process.env.MONGO_URI, {
