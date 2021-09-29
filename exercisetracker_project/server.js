@@ -120,3 +120,81 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
     res.status(500).json('Server Error');
   }
 });
+
+app.get('/api/users/:_id/logs', async (req, res) => {
+  // GET WHTS TYPED IN URL INSTEAD OF _ID
+  const typedId = req.params._id;
+  // GET QUERYIES AND ASSIGHN THEM TO FROM,TO,LIMIT
+  const { from, to, limit } = req.query;
+  // CREATE AN LOG ERRAY TO STORE VALUE LATER
+  let logs = [];
+
+  try {
+    // CHECK FOR USER WITH MATCHING ID
+    const foundLog = await User.findOne({ _id: typedId });
+    if (foundLog) {
+      // IF FOUND PUSH ALL HIS EXERCISES TO LOGS ARRAY
+      const foundExeLogs = await Exe.find({ key: foundLog._id }, { _id: 0, key: 0, __v: 0 }).lean().exec();
+      logs = [...foundExeLogs];
+      // --------------------------------------
+
+      // CHECK IF FROM OR TO TYPED AFTER LOGS IN URL AND IF YES
+      if (req.query.from || req.query.to) {
+        // CREATE 2 DATES
+        let typedFrom = new Date(0); // INITIAL DATE
+        let typedTo = new Date(); // FINISH DATE
+
+        // IF FROM TYPED ASSIGN NEW WALUE OF WHAT TYPED IN URL TO typedFrom
+        if (from) {
+          typedFrom = new Date(from);
+
+          // IF TO TYPED ASSIGN NEW WALUE OF WHAT TYPED IN URL TO typedTo
+        }
+        if (to) {
+          typedTo = new Date(to);
+        }
+        // MODIFY LOGS ACCORDING TO NEW DATE'S FILTER
+        logs = await logs.filter((foundLog) => new Date(foundLog.date).getTime() > typedFrom
+     && new Date(foundLog.date).getTime() < typedTo);
+
+        // IF LIMIT IS TYPED, CROP THE ARRAY
+        if (limit) {
+          logs = logs.slice(0, limit);
+        }
+
+        // SEND RESPONSE
+        res.json({
+          _id: foundLog._id,
+          username: foundLog.username,
+          from: typedFrom.toDateString(),
+          to: typedTo.toDateString(),
+          count: logs.length,
+          log: logs,
+        });
+        // --------------------------------------
+      } else {
+        // IF BOTH FROM AND TO WAS NOT TYPED
+
+        // IF LIMIT IS TYPED, CROP THE ARRAY
+        if (req.query.limit) {
+          logs = logs.slice(0, req.query.limit);
+        }
+        // --------------------------------------
+
+        // SEND RESPONSE
+        res.json({
+          _id: foundLog._id,
+          username: foundLog.username,
+          count: logs.length,
+          log: logs,
+        });
+      }
+      // --------------------------------------
+    }
+
+    // CHECK FOR ERRORS
+  } catch (err) {
+    console.error(err);
+    res.status(500).json('Server Error');
+  }
+});
