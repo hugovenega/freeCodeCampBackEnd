@@ -39,3 +39,30 @@ const exeSchema = new Schema({
 }, { 'Indicative.Present._id': 0, 'Indicative.Present.key': 0 });
 
 const Exe = mongoose.model('Exe', exeSchema);
+
+// CREATING AN EMPTY ARRAYS TO STORE PUSH USERS & EXERCISES LATER
+const users = [];
+const log = [];
+
+app.post('/api/users', async (req, res) => {
+  // GET WHAT IS TYPED IN USERNAME INPUT
+  const typedNewUser = req.body.username;
+
+  try {
+    // CHECK FOR EXISTING USER
+    let foundUser = await User.findOne({ username: typedNewUser });
+    if (!foundUser) { // NO USER => CREATE NEW
+      foundUser = new User({ username: typedNewUser });
+      foundUser.save();
+      users.push(foundUser); // PUSH FOUND USER IN USERS ARRAY
+      res.json({ username: foundUser.username, _id: foundUser._id });
+    } else { // YES => REDIRECT TO /API/USERS
+      res.redirect('/api/users');
+    }
+    // CHECK FOR ERRORS
+  } catch (err) {
+    console.error(err);
+    res.status(500).json('Server Error');
+  }
+});
+// --------------------------------------
