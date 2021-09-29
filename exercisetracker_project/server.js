@@ -65,4 +65,7 @@ app.post('/api/users', async (req, res) => {
     res.status(500).json('Server Error');
   }
 });
-// --------------------------------------
+
+app.get('/api/users', (req, res) => {
+  res.send([...users]); // SEND ARRAY WITH USERS ARRAY
+});
