@@ -20,3 +20,22 @@ mongoose.connect(process.env.MONGO_URI, {
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/views/index.html`);
 });
+
+const userSchema = new Schema({
+  username: String,
+
+}, { versionKey: false }); // HIDE VERSION KEY
+
+const User = mongoose.model('User', userSchema);
+// --------------------------------------
+
+// DEFINING SCHEMA & MODEL FOR EXERCISE
+const exeSchema = new Schema({
+  key: String,
+  description: String,
+  duration: Number,
+  date: String,
+  // HIDE ID AND PROPERTY "KEY"
+}, { 'Indicative.Present._id': 0, 'Indicative.Present.key': 0 });
+
+const Exe = mongoose.model('Exe', exeSchema);
