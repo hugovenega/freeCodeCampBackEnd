@@ -1,5 +1,9 @@
 const express = require('express');
 const createCorsMiddleware = require('cors');
+const serverIndexController = require('./routes/serverIndex.controller');
+const dateEntryController = require('./routes/dateEntry.controller');
+const dateNowController = require('./routes/dateNow.controller');
+
 const corsMiddlewareOpts = { optionsSuccessStatus: 200 };
 const app = express();
 
