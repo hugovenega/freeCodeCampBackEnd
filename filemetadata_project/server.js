@@ -1,12 +1,14 @@
 const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
+const dotEnv = require('dotenv');
 const multer = require('multer');
+const createCorsMiddleware = require('cors');
 
 const app = express();
+const corsMiddlewareOpts = { optionsSuccessStatus: 200 };
+dotEnv.config();
 
-app.use(cors());
 app.use('/public', express.static(`${process.cwd()}/public`));
+app.use(createCorsMiddleware(corsMiddlewareOpts));
 
 app.get('/', (req, res) => {
   res.sendFile(`${process.cwd()}/views/index.html`);
