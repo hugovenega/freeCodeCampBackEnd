@@ -2,8 +2,8 @@ const express = require('express');
 const dotEnv = require('dotenv');
 const multer = require('multer');
 const createCorsMiddleware = require('cors');
-const serverIndexController = require('./routes/serverIndex.controller');
-const fileAnalyseController = require('./routes/fileanalyse.controller');
+const serverIndexController = require('./controllers/serverIndex.controller');
+const fileAnalyseController = require('./controllers/fileanalyse.controller');
 
 const app = express();
 const corsMiddlewareOpts = { optionsSuccessStatus: 200 };
