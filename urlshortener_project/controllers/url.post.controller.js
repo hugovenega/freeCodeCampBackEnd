@@ -1,4 +1,5 @@
 const Url = require('../models/url');
+const dns = require('dns');
 
 module.exports = function urlPostController(req, res) {
   const urlRequest = req.body.url;

@@ -1,14 +1,13 @@
+require('dotenv').config();
 const express = require('express');
-const dotEnv = require('dotenv');
-const dns = require('dns');
 const createCorsMiddleware = require('cors');
+const urlPostController = require('./controllers/url.post.controller');
 const urlGetController = require('./controllers/url.get.controller');
 
 const app = express();
 const port = 3000;
 const corsMiddlewareOpts = { optionsSuccessStatus: 200 };
 const urlencodedOpts = { extended: true };
-dotEnv.config();
 
 app.use(createCorsMiddleware(corsMiddlewareOpts));
 app.use(express.urlencoded(urlencodedOpts));
