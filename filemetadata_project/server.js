@@ -2,6 +2,8 @@ const express = require('express');
 const dotEnv = require('dotenv');
 const multer = require('multer');
 const createCorsMiddleware = require('cors');
+const serverIndexController = require('./routes/serverIndex.controller');
+const fileAnalyseController = require('./routes/fileanalyse.controller');
 
 const app = express();
 const corsMiddlewareOpts = { optionsSuccessStatus: 200 };
@@ -10,17 +12,9 @@ dotEnv.config();
 app.use('/public', express.static(`${process.cwd()}/public`));
 app.use(createCorsMiddleware(corsMiddlewareOpts));
 
-app.get('/', (req, res) => {
-  res.sendFile(`${process.cwd()}/views/index.html`);
-});
+app.get('/', serverIndexController);
 
-app.post('/api/fileanalyse', multer().single('upfile'), (req, res) => {
-  res.json({
-    name: req.file.originalname,
-    type: req.file.mimetype,
-    size: req.file.size,
-  });
-});
+app.post('/api/fileanalyse', multer().single('upfile'), fileAnalyseController);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
