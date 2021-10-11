@@ -1,8 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const createCorsMiddleware = require('cors');
-const urlPostController = require('./controllers/url.post.controller');
+const serverIndexController = require('./controllers/serverIndex.controller');
 const urlGetController = require('./controllers/url.get.controller');
+const urlPostController = require('./controllers/url.post.controller');
 
 const app = express();
 const port = 3000;
@@ -14,9 +15,7 @@ app.use(express.urlencoded(urlencodedOpts));
 app.use(express.json());
 app.use('/public', express.static(`${__dirname}/public`));
 
-app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/views/index.html`);
-});
+app.get('/', serverIndexController);
 app.post('/api/shorturl', urlPostController);
 app.get('/api/shorturl/:shorturl', urlGetController);
 
