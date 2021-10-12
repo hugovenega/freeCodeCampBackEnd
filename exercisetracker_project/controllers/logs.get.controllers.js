@@ -9,7 +9,10 @@ async function chargeLogs(req, res) {
   try {
     const foundLog = await User.findOne({ _id: typedId });
     if (foundLog) {
-      const foundExeLogs = await Exe.find({ key: foundLog._id }, { _id: 0, key: 0, __v: 0 }).lean().exec();
+      const foundExeLogs = await Exe
+        .find({ key: foundLog._id }, { _id: 0, key: 0, __v: 0 })
+        .lean()
+        .exec();
       logs = [...foundExeLogs];
       if (req.query.from || req.query.to) {
         let typedFrom = new Date(0);
